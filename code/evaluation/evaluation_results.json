@@ -1,0 +1,110 @@
+{
+  "strategy_a": {
+    "field_accuracies": {
+      "evidence_standard_met": 0.9,
+      "evidence_standard_met_reason": 1.0,
+      "risk_flags": 0.55,
+      "issue_type": 0.55,
+      "object_part": 0.55,
+      "claim_status": 0.65,
+      "claim_status_justification": 1.0,
+      "supporting_image_ids": 0.55,
+      "valid_image": 0.9,
+      "severity": 0.4
+    },
+    "overall_row_accuracy": 0.1,
+    "claim_status_confusion": {
+      "expected_supported": {
+        "predicted_supported": 13,
+        "predicted_contradicted": 0,
+        "predicted_not_enough_information": 0
+      },
+      "expected_contradicted": {
+        "predicted_supported": 5,
+        "predicted_contradicted": 0,
+        "predicted_not_enough_information": 0
+      },
+      "expected_not_enough_information": {
+        "predicted_supported": 2,
+        "predicted_contradicted": 0,
+        "predicted_not_enough_information": 0
+      }
+    },
+    "severity_distribution": {
+      "expected": {
+        "none": 2,
+        "low": 4,
+        "medium": 11,
+        "high": 1,
+        "unknown": 2
+      },
+      "predicted": {
+        "none": 0,
+        "low": 3,
+        "medium": 8,
+        "high": 1,
+        "unknown": 8
+      }
+    },
+    "total_calls": 0,
+    "total_input_tokens": 0,
+    "total_output_tokens": 0,
+    "estimated_cost_usd": 0.0,
+    "runtime_seconds": 54.98947525024414,
+    "latency_per_claim": 2.749473762512207
+  },
+  "strategy_b": {
+    "field_accuracies": {
+      "evidence_standard_met": 0.9,
+      "evidence_standard_met_reason": 1.0,
+      "risk_flags": 0.55,
+      "issue_type": 0.55,
+      "object_part": 0.55,
+      "claim_status": 0.65,
+      "claim_status_justification": 1.0,
+      "supporting_image_ids": 0.55,
+      "valid_image": 0.9,
+      "severity": 0.4
+    },
+    "overall_row_accuracy": 0.1,
+    "claim_status_confusion": {
+      "expected_supported": {
+        "predicted_supported": 13,
+        "predicted_contradicted": 0,
+        "predicted_not_enough_information": 0
+      },
+      "expected_contradicted": {
+        "predicted_supported": 5,
+        "predicted_contradicted": 0,
+        "predicted_not_enough_information": 0
+      },
+      "expected_not_enough_information": {
+        "predicted_supported": 2,
+        "predicted_contradicted": 0,
+        "predicted_not_enough_information": 0
+      }
+    },
+    "severity_distribution": {
+      "expected": {
+        "none": 2,
+        "low": 4,
+        "medium": 11,
+        "high": 1,
+        "unknown": 2
+      },
+      "predicted": {
+        "none": 0,
+        "low": 3,
+        "medium": 8,
+        "high": 1,
+        "unknown": 8
+      }
+    },
+    "total_calls": 0,
+    "total_input_tokens": 0,
+    "total_output_tokens": 0,
+    "estimated_cost_usd": 0.0,
+    "runtime_seconds": 58.72165775299072,
+    "latency_per_claim": 2.936082887649536
+  }
+}

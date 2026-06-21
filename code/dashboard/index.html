@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackerRank Orchestrate - Damage Claim Verification Console</title>
+    <!-- Import Google Font Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 6V12L16 14" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Claim Shield AI</span>
+                </div>
+                <div class="dataset-selector">
+                    <button class="btn-toggle active" id="btn-dataset-test" onclick="switchDataset('test')">Test Set</button>
+                    <button class="btn-toggle" id="btn-dataset-sample" onclick="switchDataset('sample')">Sample Set</button>
+                </div>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search claims (ID, Object)..." oninput="filterClaimsList()">
+            </div>
+
+            <div class="claims-list-wrapper">
+                <div class="section-title">Submitted Claims (<span id="claims-count">0</span>)</div>
+                <ul class="claims-list" id="claims-ul">
+                    <!-- Dynamic List Items -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h1 id="claim-id-display">Select a Claim</h1>
+                    <p id="claim-subtitle">Choose a claim from the sidebar to inspect visual evidence and verify claims.</p>
+                </div>
+                <nav class="header-tabs">
+                    <button class="tab-link active" onclick="switchTab('workspace')">Workspace</button>
+                    <button class="tab-link" onclick="switchTab('analytics')">Evaluation Metrics</button>
+                </nav>
+            </header>
+
+            <!-- Workspace Tab -->
+            <div class="tab-content active" id="tab-workspace">
+                <div class="workspace-grid">
+                    <!-- Left Column: Context Card -->
+                    <div class="card panel-context">
+                        <div class="card-header">
+                            <h2>Claim Context</h2>
+                            <span class="badge" id="claim-object-badge">None</span>
+                        </div>
+                        <div class="card-body">
+                            <!-- User Chat Transcript -->
+                            <div class="transcript-section">
+                                <h3>Chat Transcript</h3>
+                                <div class="chat-box" id="chat-box">
+                                    <!-- Dynamic chat messages -->
+                                    <div class="chat-placeholder">Select a claim to display transcript.</div>
+                                </div>
+                            </div>
+
+                            <!-- User Claim History -->
+                            <div class="history-section">
+                                <h3>User History</h3>
+                                <div class="history-card" id="history-card">
+                                    <div class="history-grid">
+                                        <div class="hist-metric">
+                                            <span class="label">Past Claims</span>
+                                            <span class="val" id="hist-past-claims">-</span>
+                                        </div>
+                                        <div class="hist-metric">
+                                            <span class="label">Accepted</span>
+                                            <span class="val success" id="hist-accepted">-</span>
+                                        </div>
+                                        <div class="hist-metric">
+                                            <span class="label">Rejected</span>
+                                            <span class="val danger" id="hist-rejected">-</span>
+                                        </div>
+                                        <div class="hist-metric">
+                                            <span class="label">90 Day Freq</span>
+                                            <span class="val" id="hist-90-days">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="history-summary">
+                                        <strong>Risk Summary:</strong>
+                                        <p id="hist-summary-text">Select a claim...</p>
+                                    </div>
+                                    <div class="history-flags" id="history-flags-wrapper">
+                                        <!-- Flags -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Column: Images Board -->
+                    <div class="card panel-images">
+                        <div class="card-header">
+                            <h2>Visual Evidence Board</h2>
+                            <span class="badge secondary" id="image-count-badge">0 Images</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="evidence-requirements">
+                                <h3>Evidence Requirements Check</h3>
+                                <ul id="reqs-list">
+                                    <!-- Dynamic requirements list -->
+                                    <li>Select a claim to load checklist.</li>
+                                </ul>
+                            </div>
+                            <div class="image-gallery" id="image-gallery">
+                                <div class="gallery-placeholder">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                        <polyline points="21 15 16 10 5 21"/>
+                                    </svg>
+                                    <p>Select a claim to load images.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Verification Console -->
+                    <div class="card panel-agent">
+                        <div class="card-header">
+                            <h2>AI Verification Agent</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="agent-control">
+                                <div class="form-group">
+                                    <label for="strategy-select">Select Verification Strategy:</label>
+                                    <select id="strategy-select">
+                                        <option value="strategy_a">Strategy A (Default Single-Pass)</option>
+                                        <option value="strategy_b">Strategy B (Two-Pass Validity & Assessment)</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" id="btn-verify" onclick="runVerification()">Run Claim Verification</button>
+                            </div>
+
+                            <div class="agent-results" id="agent-results">
+                                <div class="results-placeholder" id="results-placeholder">
+                                    <div class="spinner-wrapper" id="spinner-wrapper" style="display:none;">
+                                        <div class="spinner"></div>
+                                        <p>Running multi-modal analysis...</p>
+                                    </div>
+                                    <p id="placeholder-text">Click "Run Claim Verification" to inspect evidence and evaluate the claim.</p>
+                                </div>
+                                
+                                <!-- Verdict Screen (Initially hidden) -->
+                                <div class="verdict-report" id="verdict-report" style="display:none;">
+                                    <div class="verdict-header">
+                                        <div class="verdict-status-box">
+                                            <span class="label">CLAIM STATUS</span>
+                                            <span class="status-value" id="verdict-claim-status">-</span>
+                                        </div>
+                                        <div class="verdict-severity-box">
+                                            <span class="label">SEVERITY</span>
+                                            <span class="severity-value" id="verdict-severity">-</span>
+                                        </div>
+                                        <div class="verdict-confidence-box">
+                                            <span class="label">CONFIDENCE</span>
+                                            <span class="confidence-value" id="verdict-confidence">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="verdict-metric-bar">
+                                        <div class="metric-item">
+                                            <span class="label">Valid Image</span>
+                                            <span class="status-indicator" id="verdict-valid-image">-</span>
+                                        </div>
+                                        <div class="metric-item">
+                                            <span class="label">Evidence Met</span>
+                                            <span class="status-indicator" id="verdict-evidence-met">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="verdict-details">
+                                        <div class="detail-row">
+                                            <strong>Visible Issue Type:</strong>
+                                            <span id="verdict-issue-type">-</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <strong>Object Part:</strong>
+                                            <span id="verdict-object-part">-</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <strong>Supporting Images:</strong>
+                                            <span id="verdict-supporting-images">-</span>
+                                        </div>
+                                        <div class="detail-row flex-col">
+                                            <strong>Evidence Rule Reason:</strong>
+                                            <p id="verdict-evidence-reason" class="text-block">-</p>
+                                        </div>
+                                        <div class="detail-row flex-col">
+                                            <strong>Agent Justification:</strong>
+                                            <p id="verdict-justification" class="text-block highlight">-</p>
+                                        </div>
+                                        <div class="detail-row flex-col">
+                                            <strong>Reasoning Scratchpad (Chain of Thought):</strong>
+                                            <p id="verdict-scratchpad" class="text-block">-</p>
+                                        </div>
+                                        <div class="detail-row flex-col">
+                                            <strong>Risk Flags:</strong>
+                                            <div id="verdict-risk-flags" class="flags-list">
+                                                <!-- Dynamic risk badges -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Token usage analytics -->
+                                    <div class="token-analytics">
+                                        <h4>API Operational Costs</h4>
+                                        <div class="token-grid">
+                                            <div class="tok-stat">
+                                                <span class="lbl">In Tokens</span>
+                                                <span class="val" id="tok-input">0</span>
+                                            </div>
+                                            <div class="tok-stat">
+                                                <span class="lbl">Out Tokens</span>
+                                                <span class="val" id="tok-output">0</span>
+                                            </div>
+                                            <div class="tok-stat">
+                                                <span class="lbl">Est. Cost</span>
+                                                <span class="val cost" id="tok-cost">$0.0000</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-content" id="tab-analytics">
+                <div class="analytics-layout">
+                    <!-- Strategy Comparison Card -->
+                    <div class="card width-full">
+                        <div class="card-header">
+                            <h2>Strategy Performance Metrics (dataset/sample_claims.csv)</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="metrics-grid" id="metrics-loading">
+                                <p>Loading evaluation results... Make sure you run evaluation first.</p>
+                            </div>
+                            <div class="metrics-grid" id="metrics-content" style="display:none;">
+                                <!-- Strategy Tables -->
+                                <div class="strategy-card">
+                                    <h3>Strategy A (Single-Pass)</h3>
+                                    <div class="overall-acc">
+                                        <div class="acc-circle" id="stra-acc-circle">0%</div>
+                                        <span>Overall Row Accuracy</span>
+                                    </div>
+                                    <div class="accuracies-list" id="stra-field-accuracies">
+                                        <!-- Dynamic list -->
+                                    </div>
+                                    <div class="strategy-stats">
+                                        <div>Calls: <strong id="stra-calls">-</strong></div>
+                                        <div>Tokens: <strong id="stra-tokens">-</strong></div>
+                                        <div>Cost: <strong class="cost" id="stra-cost">-</strong></div>
+                                        <div>Latency: <strong id="stra-latency">-</strong></div>
+                                    </div>
+                                </div>
+
+                                <div class="strategy-card">
+                                    <h3>Strategy B (Two-Pass Image Verification)</h3>
+                                    <div class="overall-acc">
+                                        <div class="acc-circle" id="strb-acc-circle">0%</div>
+                                        <span>Overall Row Accuracy</span>
+                                    </div>
+                                    <div class="accuracies-list" id="strb-field-accuracies">
+                                        <!-- Dynamic list -->
+                                    </div>
+                                    <div class="strategy-stats">
+                                        <div>Calls: <strong id="strb-calls">-</strong></div>
+                                        <div>Tokens: <strong id="strb-tokens">-</strong></div>
+                                        <div>Cost: <strong class="cost" id="strb-cost">-</strong></div>
+                                        <div>Latency: <strong id="strb-latency">-</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confusion Matrix Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Claim Status Confusion Breakdown (Strategy A)</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="matrix-wrapper" id="matrix-wrapper">
+                                <!-- Matrix Table -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Severity Distribution Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Severity Distribution</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="distribution-wrapper" id="severity-wrapper">
+                                <!-- Bars comparison -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Zoomed view">
+        <span class="close-lightbox">&times;</span>
+    </div>
+
+    <script src="/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Environment secrets
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Output and build archives
+code.zip
+output.csv
+dataset/output.csv
+
+# Agent/workspace metadata
+.agents/
